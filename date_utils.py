@@ -100,9 +100,9 @@ def pedir_ano() -> int:
             print('Erro: Digite apenas números para dia, mês e ano.')
             continue
 
-def pedir_data() -> str:
+def pedir_data(solicitacao: str) -> str:
 
-    print('Informe uma nova data para o aniversário')
+    print(solicitacao)
     
     is_data_validada = False
     

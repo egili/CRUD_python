@@ -1,6 +1,9 @@
 from mysql.connector import connect, Error
-from date_utils import pedir_data
-from utils import obtem_nome_validado
+from date_utils      import pedir_data
+from name_utils      import obtem_nome_validado
+from email_utils     import pedir_email
+from address_utils   import pedir_endereco
+from phone_utils     import pedir_telefone, pedir_celular
 
 def apresente_se():
     print('+-------------------------------------------------------------+')
@@ -91,11 +94,11 @@ def incluir():
         if ja_cadastrado:
             print("Nome já cadastrado!")
         else:
-            aniversario = input('Aniversário: ')
-            endereco    = input('Endereço...: ')
-            telefone    = input('Telefone...: ')
-            celular     = input('Celular....: ')
-            email       = input('e-mail.....: ')
+            aniversario = pedir_data('Aniversário: ')
+            endereco    = pedir_endereco('Endereço...: ')
+            telefone    = pedir_telefone('Telefone (com ou sem DDD): ')	
+            celular     = pedir_celular('Celular (com ou sem DDD): ')
+            email       = pedir_email('Email: ')
 
             try:
                 insercao_contato (nome, aniversario, endereco, telefone, celular, email)
@@ -168,29 +171,35 @@ def atualizar():
         
         while True:
             opcao = int(opcao_escolhida(menu_atualizacao))
-            if opcao == 6:  
+            if opcao == 6: 
                 break
                 
             try:
                 if opcao == 1:
-                    valor = pedir_data()
+                    valor = pedir_data('Informe a nova data de aniversário: ')
                     atualizar_campo(nome, 'Aniversario', valor)
+                    
                 elif opcao == 2:
-                    valor = input('Novo endereço: ')
+                    valor = pedir_endereco('Informe o novo endereço: ')
                     atualizar_campo(nome, 'Endereco', valor)
+                    
                 elif opcao == 3:
-                    valor = input('Novo telefone: ')
+                    valor = pedir_telefone('Informe o novo telefone (com ou sem DDD): ')
                     atualizar_campo(nome, 'Telefone', valor)
+                    
                 elif opcao == 4:
-                    valor = input('Novo celular: ')
+                    valor = pedir_celular('Informe o novo celular (com ou sem DDD): ')
                     atualizar_campo(nome, 'Celular', valor)
+                    
                 elif opcao == 5:
-                    valor = input('Novo email: ')
+                    valor = pedir_email('Informe o novo email: ')
                     atualizar_campo(nome, 'Email', valor)
                     
                 print('Atualização realizada com sucesso!')
+                
             except Error as e:
                 print(f"Erro ao atualizar campo: {e}")
+                
     except Error as e:
         print(f"Erro ao atualizar contato: {e}")
 
