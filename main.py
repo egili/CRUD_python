@@ -37,6 +37,7 @@ def opcao_escolhida(mnu):
 
     opcoes_validas = []
     posicao = 0
+    
     while posicao < len(mnu):
         print (posicao + 1,') ', mnu[posicao], sep = '')
         opcoes_validas.append(str(posicao + 1))
@@ -72,10 +73,10 @@ def is_contato_cadastrado(nome: str) -> bool:
 
 def insercao_contato(nome, aniversario, endereco, telefone, celular, email):
     
-    comando= "INSERT INTO CONTATOS "+\
-            "(Nome, Aniversario, Endereco, Telefone, Celular, Email) "+\
-            "VALUES "+\
-            f"('{nome}', STR_TO_DATE('{aniversario}','%d/%m/%Y'), '{endereco}', {telefone}, {celular}, '{email}')"
+    comando = "INSERT INTO CONTATOS " + \
+        "(Nome, Aniversario, Endereco, Telefone, Celular, Email) " + \
+        "VALUES " + \
+        f"('{nome}', STR_TO_DATE('{aniversario}','%d/%m/%Y'), '{endereco}', {telefone}, {celular}, '{email}')"
 
     conexao = conecta_bd()
     cursor  = conexao.cursor()
@@ -111,10 +112,9 @@ def procurar():
     
     nome = obtem_nome_validado('\nNome do contato a procurar: ')
     try:
-        comando = f"SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS WHERE nome='{nome}'"
         conexao = conecta_bd()        
         cursor  = conexao.cursor()
-        cursor.execute(comando)
+        cursor.execute(f"SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS WHERE nome='{nome}'")
         contato = cursor.fetchone()
         
         if contato:
@@ -272,34 +272,38 @@ def fecha_conexao():
     cursor.close()
     conexao.close()
 
-apresente_se()
+def main():
 
-menu = [
-    'Incluir Contato',\
-    'Procurar Contato',\
-    'Atualizar Contato',\
-    'Listar Contatos',\
-    'Excluir Contato',\
-    'Sair do Programa'
-]
+    apresente_se()
 
-deseja_finalizar = False
-while not deseja_finalizar:
-    opcao = int(opcao_escolhida(menu))
+    menu = [
+        'Incluir Contato',\
+        'Procurar Contato',\
+        'Atualizar Contato',\
+        'Listar Contatos',\
+        'Excluir Contato',\
+        'Sair do Programa'
+    ]
 
-    if opcao == 1:
-        incluir()
-    elif opcao == 2:
-        procurar()
-    elif opcao == 3:
-        atualizar()
-    elif opcao == 4:
-        listar()
-    elif opcao == 5:
-        excluir()
-    else: 
-        fecha_conexao()
-        deseja_finalizar = True
+    deseja_finalizar = False
+    while not deseja_finalizar:
+        opcao = int(opcao_escolhida(menu))
 
-print()       
-print('PROGRAMA ENCERRADO; OBRIGADO POR USAR ESTE PROGRAMA! \n')
+        if opcao == 1:
+            incluir()
+        elif opcao == 2:
+            procurar()
+        elif opcao == 3:
+            atualizar()
+        elif opcao == 4:
+            listar()
+        elif opcao == 5:
+            excluir()
+        else: 
+            fecha_conexao()
+            deseja_finalizar = True
+
+    print()       
+    print('PROGRAMA ENCERRADO; OBRIGADO POR USAR ESTE PROGRAMA! \n')
+
+main()
