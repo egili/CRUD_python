@@ -28,7 +28,7 @@ def um_texto(solicitacao: str, mensagem: str, valido) -> str:
         if txt not in valido:
             print(mensagem,'- Favor redigitar...')
         else:
-            digitou_direito=True
+            digitou_direito = True
 
     return txt
 
@@ -38,7 +38,7 @@ def opcao_escolhida(mnu):
     opcoes_validas = []
     posicao = 0
     while posicao < len(mnu):
-        print (posicao + 1,') ', mnu[posicao], sep='')
+        print (posicao + 1,') ', mnu[posicao], sep = '')
         opcoes_validas.append(str(posicao + 1))
         posicao += 1
 
@@ -61,24 +61,21 @@ obtem_conexao.conexao = None
 
 def is_contato_cadastrado(nome: str) -> bool:
     
-    comando = f"Select * from CONTATOS where nome='{nome}'"
-
     conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
-    cursor = conexao.cursor()
-    cursor.execute(comando)
+    cursor  = conexao.cursor()
+    cursor.execute(f"SELECT * FROM CONTATOS WHERE nome='{nome}'")
 
-    linhas = cursor.fetchall()
-    return linhas != [] # se vem [], nao selecionou nada, nome nao cadastrado
+    return cursor.fetchall() != [] # se vem [], nao selecionou nada, nome nao cadastrado
 
 def insercao_contato(nome, aniversario, endereco, telefone, celular, email):
     
-    comando= "Insert into CONTATOS "+\
-            "(Nome,Aniversario,Endereco,Telefone,Celular,Email) "+\
-            "values "+\
-            f"('{nome}',STR_TO_DATE('{aniversario}','%d/%m/%Y'),'{endereco}',{telefone},{celular},'{email}')"
+    comando= "INSERT INTO CONTATOS "+\
+            "(Nome, Aniversario, Endereco, Telefone, Celular, Email) "+\
+            "VALUES "+\
+            f"('{nome}', STR_TO_DATE('{aniversario}','%d/%m/%Y'), '{endereco}', {telefone}, {celular}, '{email}')"
 
     conexao = obtem_conexao("172.16.12.14","BD240225237","Stavk6","BD240225237")
-    cursor = conexao.cursor()
+    cursor  = conexao.cursor()
     cursor.execute(comando)
     conexao.commit()
 
@@ -142,9 +139,10 @@ def atualizar_campo(nome, campo, valor):
             comando = f"UPDATE CONTATOS SET {campo}='{valor}' WHERE nome='{nome}'"
         
         conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
-        cursor = conexao.cursor()
+        cursor  = conexao.cursor()
         cursor.execute(comando)
         conexao.commit()
+        
     except ValueError:
         print("Erro: Para datas, use o formato DD/MM/YYYY")
         raise
@@ -195,7 +193,7 @@ def atualizar():
                     valor = pedir_email('Informe o novo email: ')
                     atualizar_campo(nome, 'Email', valor)
                     
-                print('Atualização realizada com sucesso!')
+                print('Atualização realizada com sucesso! \n')
                 
             except Error as e:
                 print(f"Erro ao atualizar campo: {e}")
@@ -204,10 +202,10 @@ def atualizar():
         print(f"Erro ao atualizar contato: {e}")
 
 def listagem_contatos():
-    comando = "SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS"
+
     conexao = obtem_conexao("172.16.12.14","BD240225237","Stavk6","BD240225237")
-    cursor = conexao.cursor()
-    cursor.execute(comando)
+    cursor  = conexao.cursor()
+    cursor.execute("SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS")
 
     linhas = cursor.fetchall()
     return linhas
@@ -241,10 +239,9 @@ def excluir():
             print("Contato não encontrado!")
             return
             
-        comando = f"SELECT Nome,DATE_FORMAT(Aniversario,'%d/%m/%Y'),Endereco,Telefone,Celular,Email FROM CONTATOS WHERE nome='{nome}'"
         conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
         cursor = conexao.cursor()
-        cursor.execute(comando)
+        cursor.execute(f"SELECT Nome,DATE_FORMAT(Aniversario,'%d/%m/%Y'),Endereco,Telefone,Celular,Email FROM CONTATOS WHERE nome='{nome}'")
         
         contato = cursor.fetchone()
         print('\nDados do contato a ser excluído:')
@@ -257,9 +254,8 @@ def excluir():
         
         confirmacao = input('\nConfirma a exclusão deste contato? (S/N): ').upper()
         
-        if confirmacao == 'S':
-            comando = f"DELETE FROM CONTATOS WHERE nome='{nome}'"
-            cursor.execute(comando)
+        if confirmacao == 'S': 
+            cursor.execute(f"DELETE FROM CONTATOS WHERE nome='{nome}'")
             conexao.commit()
             print('\nContato excluído com sucesso!')
         else:
