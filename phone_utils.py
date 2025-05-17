@@ -1,4 +1,7 @@
 
+def definir_ddd_padrao(tel_cel) -> str:
+    return '19' + tel_cel
+    
 def pedir_telefone(solicitacao: str) -> str:
     while True:
         telefone = input(solicitacao).strip()
@@ -8,9 +11,9 @@ def pedir_telefone(solicitacao: str) -> str:
             continue
 
         if len(telefone) == 8:
-            telefone = '19' + telefone
+            telefone = definir_ddd_padrao(telefone)
         
-        if len(telefone) != 10 or len(telefone) != 8:
+        if len(telefone) != 10 and len(telefone) != 8:
             print("Erro: O telefone deve ter 8 (sem DDD) ou 10 (com DDD) dígitos")
             continue
 
@@ -24,15 +27,15 @@ def pedir_celular(solicitacao: str) -> str:
             print("Erro: Digite apenas números\n")
             continue
 
-        if len(celular) == 9:
-            celular = '19' + celular
-
-        if len(celular) != 11 or len(celular) != 9:
-            print("Erro: Celular deve ter 9 (sem DDD) ou 11 (com DDD) dígitos")
+        if not celular.startswith('9') and len(celular) == 9:
+            print("Erro: Números de celular devem começar com 9")
             continue
 
-        if not celular.startswith('9'):
-            print("Erro: Números de celular devem começar com 9")
+        if len(celular) == 9:
+            celular =  definir_ddd_padrao(celular)
+
+        if len(celular) != 11 and len(celular) != 9:
+            print("Erro: Celular deve ter 9 (sem DDD) ou 11 (com DDD) dígitos")
             continue
 
         return celular

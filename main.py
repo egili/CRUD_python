@@ -63,7 +63,7 @@ def is_contato_cadastrado(nome: str) -> bool:
     
     comando = f"Select * from CONTATOS where nome='{nome}'"
 
-    conexao = obtem_conexao("172.16.12.14", "BD240225285", "Ozgia4", "BD240225285")
+    conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
     cursor = conexao.cursor()
     cursor.execute(comando)
 
@@ -77,7 +77,7 @@ def insercao_contato(nome, aniversario, endereco, telefone, celular, email):
             "values "+\
             f"('{nome}',STR_TO_DATE('{aniversario}','%d/%m/%Y'),'{endereco}',{telefone},{celular},'{email}')"
 
-    conexao = obtem_conexao("172.16.12.14","BD240225285","Ozgia4","BD240225285")
+    conexao = obtem_conexao("172.16.12.14","BD240225237","Stavk6","BD240225237")
     cursor = conexao.cursor()
     cursor.execute(comando)
     conexao.commit()
@@ -112,7 +112,7 @@ def procurar():
     nome = obtem_nome_validado('\nNome do contato a procurar: ')
     try:
         comando = f"SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS WHERE nome='{nome}'"
-        conexao = obtem_conexao("172.16.12.14", "BD240225285", "Ozgia4", "BD240225285")
+        conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
         cursor = conexao.cursor()
         cursor.execute(comando)
         contato = cursor.fetchone()
@@ -141,7 +141,7 @@ def atualizar_campo(nome, campo, valor):
         else:
             comando = f"UPDATE CONTATOS SET {campo}='{valor}' WHERE nome='{nome}'"
         
-        conexao = obtem_conexao("172.16.12.14", "BD240225285", "Ozgia4", "BD240225285")
+        conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
         cursor = conexao.cursor()
         cursor.execute(comando)
         conexao.commit()
@@ -205,7 +205,7 @@ def atualizar():
 
 def listagem_contatos():
     comando = "SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS"
-    conexao = obtem_conexao("172.16.12.14","BD240225285","Ozgia4","BD240225285")
+    conexao = obtem_conexao("172.16.12.14","BD240225237","Stavk6","BD240225237")
     cursor = conexao.cursor()
     cursor.execute(comando)
 
@@ -242,7 +242,7 @@ def excluir():
             return
             
         comando = f"SELECT Nome,DATE_FORMAT(Aniversario,'%d/%m/%Y'),Endereco,Telefone,Celular,Email FROM CONTATOS WHERE nome='{nome}'"
-        conexao = obtem_conexao("172.16.12.14", "BD240225285", "Ozgia4", "BD240225285")
+        conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
         cursor = conexao.cursor()
         cursor.execute(comando)
         
@@ -268,21 +268,21 @@ def excluir():
         print(f"Erro ao excluir contato: {e}")
 
 def fecha_conexao():
-    conexao = obtem_conexao("143.106.250.84","andre","andre","andre")
+    conexao = obtem_conexao("172.16.12.14","BD240225237","Stavk6","BD240225237")
     cursor = conexao.cursor()
     cursor.close()
     conexao.close()
 
-# daqui para baixo, implementamos o programa (nosso CRUD, C=create(inserir), R=read(recuperar), U=update(atualizar), D=delete(remover,apagar)
-
 apresente_se()
 
-menu=['Incluir Contato',\
+menu = [
+    'Incluir Contato',\
     'Procurar Contato',\
     'Atualizar Contato',\
     'Listar Contatos',\
     'Excluir Contato',\
-    'Sair do Programa']
+    'Sair do Programa'
+]
 
 deseja_finalizar = False
 while not deseja_finalizar:
@@ -303,4 +303,4 @@ while not deseja_finalizar:
         deseja_finalizar = True
 
 print()       
-print('PROGRAMA ENCERRADO; OBRIGADO POR USAR ESTE PROGRAMA!')
+print('PROGRAMA ENCERRADO; OBRIGADO POR USAR ESTE PROGRAMA! \n')
