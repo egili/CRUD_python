@@ -1,19 +1,6 @@
 from mysql.connector import connect, Error
-
-'''
-BD preparado para a execução
-deste programa com o comando:
-
-CREATE TABLE CONTATOS (
-ID INT AUTO_INCREMENT PRIMARY KEY,
-NOME VARCHAR(80) NOT NULL,
-ANIVERSARIO DATE NOT NULL,
-ENDERECO VARCHAR(200) NOT NULL,
-TELEFONE BIGINT NOT NULL,
-CELULAR BIGINT NOT NULL,
-EMAIL VARCHAR(100) NOT NULL
-)
-'''
+from date_utils import pedir_data
+from utils import obtem_nome_validado
 
 def apresente_se():
     print('+-------------------------------------------------------------+')
@@ -69,7 +56,7 @@ def obtem_conexao(servidor: str, usuario: str, senha: str, bd: str):
 
 obtem_conexao.conexao = None
 
-def contato_cadastrado(nome: str) -> bool:
+def is_contato_cadastrado(nome: str) -> bool:
     
     comando = f"Select * from CONTATOS where nome='{nome}'"
 
@@ -93,10 +80,11 @@ def insercao_contato(nome, aniversario, endereco, telefone, celular, email):
     conexao.commit()
 
 def incluir():
-    nome = input('\nNome.......: ')
+    
+    nome = obtem_nome_validado('\nNome.......: ')
 
     try:
-        ja_cadastrado = contato_cadastrado(nome)
+        ja_cadastrado = is_contato_cadastrado(nome)
     except Error:    
         print("Problema de conexão com o BD!")
     else:
@@ -118,9 +106,9 @@ def incluir():
 
 def procurar():
     
-    nome = input('\nNome do contato a procurar: ') # TODO adicionar validacoes quanto ao que pode ser digitado
+    nome = obtem_nome_validado('\nNome do contato a procurar: ')
     try:
-        comando = f"SELECT Nome,DATE_FORMAT(Aniversario,'%d/%m/%Y'),Endereco,Telefone,Celular,Email FROM CONTATOS WHERE nome='{nome}'"
+        comando = f"SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS WHERE nome='{nome}'"
         conexao = obtem_conexao("172.16.12.14", "BD240225285", "Ozgia4", "BD240225285")
         cursor = conexao.cursor()
         cursor.execute(comando)
@@ -128,12 +116,12 @@ def procurar():
         
         if contato:
             print('\nDados do contato encontrado:')
-            print('Nome.......:',contato[0])
-            print('Aniversario:',contato[1])
-            print('Endereco...:',contato[2])
-            print('Telefone...:',contato[3])
-            print('Celular....:',contato[4])
-            print('e-mail.....:',contato[5])
+            print('Nome.......:', contato[0])
+            print('Aniversario:', contato[1])
+            print('Endereco...:', contato[2])
+            print('Telefone...:', contato[3])
+            print('Celular....:', contato[4])
+            print('e-mail.....:', contato[5])
         else:
             print('\nContato não encontrado!')
     except Error as e:
@@ -162,26 +150,21 @@ def atualizar_campo(nome, campo, valor):
         raise
 
 def atualizar():
-    print('Opção não implementada!')
-    # Ficar mostrando um menu oferecendo as opções de atualizar aniversário, ou
-    # endereco, ou telefone, ou celular, ou email, ou finalizar as
-    # atualizações; ficar pedindo para digitar a opção até digitar uma
-    # opção válida; realizar a atulização solicitada; até ser escolhida a
-    # opção de finalizar as atualizações.
-    # USAR A FUNÇÃO opcao_escolhida, JÁ IMPLEMENTADA, PARA FAZER O MENU
     
-    nome = input('\nNome do contato a atualizar: ')
+    nome = obtem_nome_validado('\nNome do contato a atualizar: ')
     try:
-        if not contato_cadastrado(nome):
+        if not is_contato_cadastrado(nome):
             print("Contato não encontrado!")
             return
             
-        menu_atualizacao = ['Atualizar Aniversário',
-                        'Atualizar Endereço',
-                        'Atualizar Telefone',
-                        'Atualizar Celular',
-                        'Atualizar Email',
-                        'Finalizar Atualizações']
+        menu_atualizacao = [
+            'Atualizar Aniversário',
+            'Atualizar Endereço',
+            'Atualizar Telefone',
+            'Atualizar Celular',
+            'Atualizar Email',
+            'Finalizar Atualizações'
+        ]
         
         while True:
             opcao = int(opcao_escolhida(menu_atualizacao))
@@ -190,7 +173,7 @@ def atualizar():
                 
             try:
                 if opcao == 1:
-                    valor = input('Novo aniversário (dd/mm/aaaa): ')
+                    valor = pedir_data()
                     atualizar_campo(nome, 'Aniversario', valor)
                 elif opcao == 2:
                     valor = input('Novo endereço: ')
@@ -241,9 +224,11 @@ def listar():
         print("Listagem concluida com sucesso!")
 
 def excluir():    
-    nome = input('\nNome do contato a excluir: ')
+        
+    nome = obtem_nome_validado('\nNome do contato a excluir: ')
+
     try:
-        if not contato_cadastrado(nome):
+        if not is_contato_cadastrado(nome):
             print("Contato não encontrado!")
             return
             
@@ -254,12 +239,12 @@ def excluir():
         
         contato = cursor.fetchone()
         print('\nDados do contato a ser excluído:')
-        print('Nome.......:',contato[0])
-        print('Aniversario:',contato[1])
-        print('Endereco...:',contato[2])
-        print('Telefone...:',contato[3])
-        print('Celular....:',contato[4])
-        print('e-mail.....:',contato[5])
+        print('Nome.......:', contato[0])
+        print('Aniversario:', contato[1])
+        print('Endereco...:', contato[2])
+        print('Telefone...:', contato[3])
+        print('Celular....:', contato[4])
+        print('e-mail.....:', contato[5])
         
         confirmacao = input('\nConfirma a exclusão deste contato? (S/N): ').upper()
         
@@ -304,7 +289,7 @@ while not deseja_finalizar:
         listar()
     elif opcao == 5:
         excluir()
-    else: # if opcao==6:
+    else: 
         fecha_conexao()
         deseja_finalizar = True
 
