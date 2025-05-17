@@ -24,10 +24,10 @@ def pedir_email(solicitacao: str) -> str:
         try:
             email = input(solicitacao).strip()
         except ValueError:
-            print('Erro: Digite caracteres válidos para o email')
+            print('Erro: Digite caracteres válidos para o email\n')
             continue
         
         if validar_email(email):
             return email
         else:
-            print("Email inválido. Tente novamente")
+            print("Email inválido. Tente novamente\n")

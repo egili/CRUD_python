@@ -81,7 +81,7 @@ def insercao_contato(nome, aniversario, endereco, telefone, celular, email):
 
 def incluir():
     
-    nome = obtem_nome_validado('\nNome.......: ')
+    nome = obtem_nome_validado('\nNome: ')
 
     try:
         ja_cadastrado = is_contato_cadastrado(nome)
@@ -91,18 +91,18 @@ def incluir():
         if ja_cadastrado:
             print("Nome já cadastrado!")
         else:
-            aniversario = pedir_data('Aniversário: ')
-            endereco    = pedir_endereco('Endereço...: ')
-            telefone    = pedir_telefone('Telefone (com ou sem DDD): ')	
-            celular     = pedir_celular('Celular (com ou sem DDD): ')
-            email       = pedir_email('Email: ')
+            aniversario = pedir_data('\nAniversário: ')
+            endereco    = pedir_endereco('\nEndereço: ')
+            telefone    = pedir_telefone('\nTelefone (com ou sem DDD): ')	
+            celular     = pedir_celular('\nCelular (com ou sem DDD): ')
+            email       = pedir_email('\nEmail: ')
 
             try:
                 insercao_contato (nome, aniversario, endereco, telefone, celular, email)
             except Error:
                 print("Erro nos dados digitados!")
             else:
-                print('Cadastro realizado com sucesso!')
+                print('\nCadastro realizado com sucesso!\n')
 
 def procurar():
     
@@ -228,7 +228,7 @@ def listar():
             atual += 1
 
         print()
-        print("Listagem concluida com sucesso!")
+        print("Listagem concluida com sucesso!\n")
 
 def excluir():    
         
@@ -236,7 +236,7 @@ def excluir():
 
     try:
         if not is_contato_cadastrado(nome):
-            print("Contato não encontrado!")
+            print("Contato não encontrado!\n")
             return
             
         conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
@@ -257,9 +257,9 @@ def excluir():
         if confirmacao == 'S': 
             cursor.execute(f"DELETE FROM CONTATOS WHERE nome='{nome}'")
             conexao.commit()
-            print('\nContato excluído com sucesso!')
+            print('\nContato excluído com sucesso!\n')
         else:
-            print('\nOperação cancelada!')
+            print('\nOperação cancelada!\n')
     except Error as e:
         print(f"Erro ao excluir contato: {e}")
 

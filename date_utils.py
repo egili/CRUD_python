@@ -52,11 +52,11 @@ def pedir_dia() -> int:
                         is_dia_valido = True
                         return dia
                     else:
-                        print('Erro: Valor inválido! O dia deve estar entre 1 e 31. Tente novamente.')
+                        print('Erro: Valor inválido! O dia deve estar entre 1 e 31. Tente novamente')
                 except ValueError:
-                    print('Erro: Entrada inválida! Digite apenas números inteiros.')
+                    print('Erro: valor inválido! Digite apenas números inteiros')
         except ValueError:
-            print('Erro: Digite apenas números para dia, mês e ano.')
+            print('Erro: Digite apenas números para dia, mês e ano')
             continue 
 
 def pedir_mes() -> int:
@@ -113,7 +113,7 @@ def pedir_data(solicitacao: str) -> str:
         ano = pedir_ano()
     
         if is_data_valida(dia, mes, ano) != 'valido':
-            print('Tente Novamente')
+            print('Tente Novamente\n')
         else:
             is_data_validada = True
     
