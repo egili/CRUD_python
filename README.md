@@ -95,15 +95,3 @@ O menu interativo permitirá escolher entre:
 Cada opção faz validações de entrada (nome, data, endereço, telefone, celular e e-mail) e se comunica com o MySQL para persistência dos dados.
 
 ---
-
-## 🛠 Funcionalidades Principais
-
-* **Incluir:** Novo contato com aniversários formatados e validados
-* **Procurar:** Exibe dados de um contato pelo nome
-* **Atualizar:** Permite alterar qualquer campo (data, endereço, telefone, celular ou e-mail)
-* **Listar:** Mostra todos os contatos cadastrados
-* **Excluir:** Remove contato após confirmação
-
-Todas as operações usam **mysql-connector-python** para conectar, executar consultas e manipular resultados com commits automáticos.
-
----
