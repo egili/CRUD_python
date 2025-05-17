@@ -59,9 +59,12 @@ def obtem_conexao(servidor: str, usuario: str, senha: str, bd: str):
 
 obtem_conexao.conexao = None
 
+def conecta_bd():
+    return obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
+
 def is_contato_cadastrado(nome: str) -> bool:
     
-    conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
+    conexao = conecta_bd()    
     cursor  = conexao.cursor()
     cursor.execute(f"SELECT * FROM CONTATOS WHERE nome='{nome}'")
 
@@ -74,7 +77,7 @@ def insercao_contato(nome, aniversario, endereco, telefone, celular, email):
             "VALUES "+\
             f"('{nome}', STR_TO_DATE('{aniversario}','%d/%m/%Y'), '{endereco}', {telefone}, {celular}, '{email}')"
 
-    conexao = obtem_conexao("172.16.12.14","BD240225237","Stavk6","BD240225237")
+    conexao = conecta_bd()
     cursor  = conexao.cursor()
     cursor.execute(comando)
     conexao.commit()
@@ -109,8 +112,8 @@ def procurar():
     nome = obtem_nome_validado('\nNome do contato a procurar: ')
     try:
         comando = f"SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS WHERE nome='{nome}'"
-        conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
-        cursor = conexao.cursor()
+        conexao = conecta_bd()        
+        cursor  = conexao.cursor()
         cursor.execute(comando)
         contato = cursor.fetchone()
         
@@ -138,7 +141,7 @@ def atualizar_campo(nome, campo, valor):
         else:
             comando = f"UPDATE CONTATOS SET {campo}='{valor}' WHERE nome='{nome}'"
         
-        conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
+        conexao = conecta_bd()        
         cursor  = conexao.cursor()
         cursor.execute(comando)
         conexao.commit()
@@ -203,7 +206,7 @@ def atualizar():
 
 def listagem_contatos():
 
-    conexao = obtem_conexao("172.16.12.14","BD240225237","Stavk6","BD240225237")
+    conexao = conecta_bd()
     cursor  = conexao.cursor()
     cursor.execute("SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS")
 
@@ -239,7 +242,7 @@ def excluir():
             print("Contato não encontrado!\n")
             return
             
-        conexao = obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
+        conexao = conecta_bd()        
         cursor = conexao.cursor()
         cursor.execute(f"SELECT Nome,DATE_FORMAT(Aniversario,'%d/%m/%Y'),Endereco,Telefone,Celular,Email FROM CONTATOS WHERE nome='{nome}'")
         
@@ -264,7 +267,7 @@ def excluir():
         print(f"Erro ao excluir contato: {e}")
 
 def fecha_conexao():
-    conexao = obtem_conexao("172.16.12.14","BD240225237","Stavk6","BD240225237")
+    conexao = conecta_bd()
     cursor = conexao.cursor()
     cursor.close()
     conexao.close()
