@@ -60,8 +60,8 @@ def obtem_conexao(servidor: str, usuario: str, senha: str, bd: str):
 
 obtem_conexao.conexao = None
 
-def conecta_bd():
-    return obtem_conexao("172.16.12.14", "BD240225237", "Stavk6", "BD240225237")
+def conecta_bd():   
+    return obtem_conexao("127.0.0.1", "root", "eliseu123", "sys")
 
 def is_contato_cadastrado(nome: str) -> bool:
     
@@ -209,29 +209,29 @@ def listagem_contatos():
     conexao = conecta_bd()
     cursor  = conexao.cursor()
     cursor.execute("SELECT Nome, DATE_FORMAT(Aniversario,'%d/%m/%Y'), Endereco, Telefone, Celular, Email FROM CONTATOS")
-
-    linhas = cursor.fetchall()
-    return linhas
+    
+    return cursor.fetchall()
 
 def listar():
     try:
-        linha = listagem_contatos()
-    except Error:    
-        print("Problema de conexão com o BD!")
+        contatos = listagem_contatos()
+    except Error as e:
+        print("Problema de conexão com o banco de dados:", e)
     else:
-        atual = 0
-        while atual < len(linha):
-            print()
-            print('Nome.......:', linha[atual][0])
-            print('Aniversario:', linha[atual][1])
-            print('Endereco...:', linha[atual][2])
-            print('Telefone...:', linha[atual][3])
-            print('Celular....:', linha[atual][4])
-            print('e-mail.....:', linha[atual][5])
-            atual += 1
+        if not contatos:
+            print("\nNenhum contato cadastrado.\n")
+            return
 
-        print()
-        print("Listagem concluida com sucesso!\n")
+        for nome, aniversario, endereco, telefone, celular, email in contatos:
+            print()
+            print(f'Nome.......: {nome}')
+            print(f'Aniversário: {aniversario}')
+            print(f'Endereço...: {endereco}')
+            print(f'Telefone...: {telefone}')
+            print(f'Celular....: {celular}')
+            print(f'E‑mail.....: {email}')
+            
+        print("\nListagem concluída com sucesso!\n")
 
 def excluir():    
         

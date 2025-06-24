@@ -1,7 +1,7 @@
 <h1> CRUD Python + MySQL 🐬 </h1>
 
 Projeto individual da disciplina de algoritmos de computação da PUC Campinas
-
+Eliseu Pereira Gili - 25009281
 <hr/>
 
 ## 📋 Descrição
